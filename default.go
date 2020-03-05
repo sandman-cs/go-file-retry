@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"strconv"
-	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -74,35 +72,4 @@ func sendWarnMessage(msg string) {
 		"ver":    conf.AppVer,
 		"server": conf.ServerName,
 	}).Warn(msg)
-}
-
-//sendMetrics to stdout
-func sendMetrics(good int, bad int, del int) {
-
-	log.WithFields(log.Fields{
-		"app":    conf.AppName,
-		"ver":    conf.AppVer,
-		"server": conf.ServerName,
-		"good":   good,
-		"bad":    bad,
-		"del":    del,
-		"dup":    dupEmail,
-	}).Info("metrics")
-}
-
-func healthCheck() {
-	sendMessage("Starting health check thread...")
-
-	for {
-		payload := "{\"app\": \"" + conf.AppName + "\",\"good_email\":" + strconv.Itoa(gemail) + ",\"bad_email\":" + strconv.Itoa(bemail) + ",\"del_email\":" + strconv.Itoa(dmemail) + ",\"dup_email\":" + strconv.Itoa(dupEmail) + "}"
-		sendUDPMessage(payload)
-
-		alive = 0
-		gemail = 0
-		bemail = 0
-		dmemail = 0
-		dupEmail = 0
-
-		time.Sleep(60 * time.Second)
-	}
 }

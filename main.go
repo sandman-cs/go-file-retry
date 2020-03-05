@@ -45,7 +45,6 @@ func workLoop() {
 		}
 	}()
 	for {
-		alive++
 		//This is debug code...
 		fmt.Println("Checking for work at: ", conf.SrcDir, " ...")
 
@@ -53,7 +52,6 @@ func workLoop() {
 		checkError(err)
 		time.Sleep(500 * time.Millisecond)
 		for _, file := range files {
-			alive++
 			sFileName := fmt.Sprintf("%s\\%s", conf.SrcDir, file.Name())
 
 			//This is debug code...

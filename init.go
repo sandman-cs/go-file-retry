@@ -33,9 +33,7 @@ type configuration struct {
 }
 
 var (
-	conf                                             configuration
-	alive, gemail, bemail, dmemail, qemail, dupEmail int
-
+	conf           configuration
 	closeReceived  bool
 	retryHashCheck *cache.Cache
 )
@@ -96,8 +94,6 @@ func init() {
 	}
 
 	retryHashCheck = cache.New(conf.RetryDelay*time.Minute, conf.RetryDelay+30*time.Minute)
-
-	go healthCheck()
 
 }
 
