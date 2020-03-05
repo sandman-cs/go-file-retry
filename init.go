@@ -44,7 +44,7 @@ func init() {
 
 	conf.AppName = "Go - FileRetry"
 	conf.AppVer = "1.0"
-	conf.SysLogSrv = "splunk"
+	conf.SysLogSrv = "localhost"
 	conf.SysLogPort = "514"
 	conf.ServerName, _ = os.Hostname()
 	conf.ChannelSize = 1024
@@ -81,7 +81,6 @@ func init() {
 	// Log as JSON instead of the default ASCII formatter.
 	log.SetFormatter(&log.JSONFormatter{})
 	// Output to stdout instead of the default stderr
-	// Can be any io.Writer, see below for File example
 	log.SetOutput(os.Stdout)
 	// Set Log Level to debug, info or warn, system supports debug, info, warn, fatal, panic
 	conf.LogLevel = strings.ToLower(conf.LogLevel)
@@ -93,10 +92,12 @@ func init() {
 		log.SetLevel(log.InfoLevel)
 	}
 
-	retryHashCheck = cache.New(conf.RetryDelay*time.Minute, conf.RetryDelay+30*time.Minute)
+	//Create inmemory cache for retry tracking...
+	retryHashCheck = cache.New(conf.RetryDelay*time.Duration(conf.RetryCount+1)*time.Minute, conf.RetryDelay*time.Duration(conf.RetryCount+2)*time.Minute)
 
 }
 
+// Checkes for match in cache and replys with true/false for match and count.  true = don't retry anymore.
 func retryHashChecker(matchString string) bool {
 
 	// Create CRC
