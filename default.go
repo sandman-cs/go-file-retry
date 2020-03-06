@@ -8,12 +8,13 @@ import (
 )
 
 //checkError function
-func checkError(err error) {
+func checkError(err error, txt string) {
 	if err != nil {
 		log.WithFields(log.Fields{
 			"app":    conf.AppName,
 			"ver":    conf.AppVer,
 			"server": conf.ServerName,
+			"msg":    txt,
 		}).Error(fmt.Sprint(err))
 	}
 }
@@ -27,19 +28,19 @@ func failOnError(err error, msg string) {
 
 func sendUDPMessage(msg string) {
 	ServerAddr, err := net.ResolveUDPAddr("udp", conf.SysLogSrv+":"+conf.SysLogPort)
-	checkError(err)
+	checkError(err, "Error resolving syslog server address...")
 	if err == nil {
 
 		LocalAddr, err := net.ResolveUDPAddr("udp", ":0")
-		checkError(err)
+		checkError(err, "Error creating socket to send UDP message...")
 
 		Conn, err := net.DialUDP("udp", LocalAddr, ServerAddr)
-		checkError(err)
+		checkError(err, "Error connecting too syslog destination...")
 
 		defer Conn.Close()
 		buf := []byte(msg)
 		if _, err := Conn.Write(buf); err != nil {
-			checkError(err)
+			checkError(err, "Error sending data too syslog destination...")
 		}
 	}
 }

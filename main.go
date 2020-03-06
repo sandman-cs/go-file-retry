@@ -49,7 +49,7 @@ func workLoop() {
 		fmt.Println("Checking for work at: ", conf.SrcDir, " ...")
 
 		files, err := ioutil.ReadDir(conf.SrcDir)
-		checkError(err)
+		checkError(err, "Error getting list of files in source directory...")
 		time.Sleep(500 * time.Millisecond)
 		for _, file := range files {
 			sFileName := fmt.Sprintf("%s\\%s", conf.SrcDir, file.Name())
@@ -71,7 +71,7 @@ func workLoop() {
 					}
 					//checkError(err)
 				}
-				checkError(err)
+				checkError(err, "Error processing file in source directory...")
 			}
 		}
 

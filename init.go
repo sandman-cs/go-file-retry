@@ -70,7 +70,7 @@ func init() {
 	//Load Configuration Data
 	dat, _ := ioutil.ReadFile("go-file-retry.json")
 	err := json.Unmarshal(dat, &conf)
-	failOnError(err, "Failed to load config.json")
+	checkError(err, "Failed to load config.json")
 
 	createIfNotExist(conf.SrcDir)
 	createIfNotExist(conf.DstDir)
