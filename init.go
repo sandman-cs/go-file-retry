@@ -58,17 +58,17 @@ func init() {
 		fmt.Println("Windows OS detected, setting default paths based on this...")
 		conf.SrcDir = szTemp + "\\retry\\"
 		conf.DstDir = szTemp + "\\work\\"
-		conf.DeadLtrDir = szTemp + "\\deadleter\\"
+		conf.DeadLtrDir = szTemp + "\\deadletter\\"
 
 	} else {
 		fmt.Println("Unix/Linux OS detected, setting default paths based on this...")
 		conf.SrcDir = szTemp + "/retry/"
 		conf.DstDir = szTemp + "/work/"
-		conf.DeadLtrDir = szTemp + "/deadleter/"
+		conf.DeadLtrDir = szTemp + "/deadletter/"
 	}
 
 	//Load Configuration Data
-	dat, _ := ioutil.ReadFile("config.json")
+	dat, _ := ioutil.ReadFile("go-file-retry.json")
 	err := json.Unmarshal(dat, &conf)
 	failOnError(err, "Failed to load config.json")
 
