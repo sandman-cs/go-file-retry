@@ -3,7 +3,7 @@ Utility to move files from failed folder to working folder, with retry limit.
 
 After the retry limit is reached, the files will be moved to a deadletter queue.
 
-Below is the possible configuration override values and their default value, override file name is "go-file-retry.json"
+Below are the possible configuration override values and their default value, override file name is "go-file-retry.json"
 ```json
 {
 	"ServerName": "os.ServerName",
