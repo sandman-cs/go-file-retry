@@ -62,14 +62,12 @@ func workLoop() {
 					go sendMessage(fmt.Sprintf("Zero byte file: %s", sFileName))
 					fmt.Println("Zero byte file: ", sFileName)
 					err = os.Remove(sFileName)
-					//checkError(err)
 				} else {
 					if !retryHashChecker(sFileName) {
 						err = moveFile(sFileName, conf.DstDir+file.Name())
 					} else {
 						err = moveFile(sFileName, conf.DeadLtrDir+file.Name())
 					}
-					//checkError(err)
 				}
 				checkError(err, "Error processing file in source directory...")
 			}

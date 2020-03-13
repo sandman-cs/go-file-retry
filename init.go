@@ -125,7 +125,10 @@ func retryHashChecker(matchString string) bool {
 func logRetryToSplunk(msg string, count int) {
 	re := regexp.MustCompile(`\r?\n`)
 	msg = re.ReplaceAllString(msg, " ")
+<<<<<<< HEAD
 	msg = strings.Replace(msg, "\\", "\\\\", -1)
+=======
+>>>>>>> 3a91318a819fda1627e5c854c0caa3ea6e6021a1
 	payload := "{\"app\": \"" + conf.AppName + "\",\"retry_count\":" + strconv.Itoa(count) + ",\"filename\":\"" + msg + "\"}"
 	sendUDPMessage(payload)
 }
