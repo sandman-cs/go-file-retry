@@ -52,7 +52,7 @@ func workLoop() {
 		checkError(err, "Error getting list of files in source directory...")
 		time.Sleep(500 * time.Millisecond)
 		for _, file := range files {
-			sFileName := fmt.Sprintf("%s\\%s", conf.SrcDir, file.Name())
+			sFileName := conf.SrcDir + file.Name()
 
 			//This is debug code...
 			fmt.Println("Checking: ", sFileName)
@@ -75,7 +75,7 @@ func workLoop() {
 			}
 		}
 
-		time.Sleep(conf.RetryDelay * time.Second)
+		time.Sleep(conf.RetryDelay * time.Minute)
 		if closeReceived {
 			sendMessage(fmt.Sprint("Closing input thread..."))
 			return

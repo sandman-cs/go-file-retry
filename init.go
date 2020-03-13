@@ -50,7 +50,7 @@ func init() {
 	conf.ChannelSize = 1024
 	conf.LogLevel = "info"
 	conf.RetryCount = 1
-	conf.RetryDelay = 15
+	conf.RetryDelay = 1
 
 	szTemp := getCurrentExecDirectory()
 
@@ -94,7 +94,6 @@ func init() {
 
 	//Create inmemory cache for retry tracking...
 	retryHashCheck = cache.New(conf.RetryDelay*time.Duration(conf.RetryCount+1)*time.Minute, conf.RetryDelay*time.Duration(conf.RetryCount+2)*time.Minute)
-
 }
 
 // Checkes for match in cache and replys with true/false for match and count.  true = don't retry anymore.
@@ -108,17 +107,17 @@ func retryHashChecker(matchString string) bool {
 	count, found := retryHashCheck.Get(crc32InString)
 
 	//Debug code...
-	fmt.Println("Count for: ", matchString, " :", count)
+	//fmt.Println("Count for: ", matchString, " :", count)
 
 	if count != nil {
 		if count.(int) < conf.RetryCount {
 			found = false
-		} else {
-			logRetryToSplunk(matchString, count.(int))
 		}
 		retryHashCheck.SetDefault(crc32InString, count.(int)+1)
+		logRetryToSplunk(matchString, count.(int))
 	} else {
-		retryHashCheck.SetDefault(crc32InString, 1)
+		retryHashCheck.SetDefault(crc32InString, 0)
+		logRetryToSplunk(matchString, 1)
 	}
 	return found
 }
@@ -126,6 +125,7 @@ func retryHashChecker(matchString string) bool {
 func logRetryToSplunk(msg string, count int) {
 	re := regexp.MustCompile(`\r?\n`)
 	msg = re.ReplaceAllString(msg, " ")
-	payload := "{\"app\": \"" + conf.AppName + "\",\"retry_count\":" + strconv.Itoa(count) + ",\"payload\":\"" + msg + "\"}"
+	msg = strings.Replace(msg, "\\", "\\\\", -1)
+	payload := "{\"app\": \"" + conf.AppName + "\",\"retry_count\":" + strconv.Itoa(count) + ",\"filename\":\"" + msg + "\"}"
 	sendUDPMessage(payload)
 }
