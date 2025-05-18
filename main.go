@@ -19,7 +19,7 @@ func main() {
 
 	go func() {
 		sig := <-sigs
-		sendMessage("Exiting Program, recieved: ")
+		sendMessage("Exiting Program, received: ")
 		sendMessage(fmt.Sprintln(sig))
 
 		//Add Code here to send message to kill all input threads.

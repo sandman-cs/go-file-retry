@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"hash/crc32"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"runtime"
@@ -68,7 +67,7 @@ func init() {
 	}
 
 	//Load Configuration Data
-	dat, _ := ioutil.ReadFile("go-file-retry.json")
+	dat, _ := os.ReadFile("go-file-retry.json")
 	err := json.Unmarshal(dat, &conf)
 	checkError(err, "Failed to load config.json")
 
